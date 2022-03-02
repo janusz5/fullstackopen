@@ -1,0 +1,35 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "added person from vs code"
+}
+
+###
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "number": "1234567890"
+}
+
+###
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "added person from vs code",
+    "number": "1234567890"
+}
+
+###
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "added person from vs code",
+    "number": "1234567890"
+}
