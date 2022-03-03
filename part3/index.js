@@ -65,16 +65,16 @@ app.post("/api/persons", (req, res) => {
     if (persons.find(person => person.name === body.name)) return res.status(400).json({error: "name must be unique"})
 
     const person = {
+        id: Math.floor(Math.random() * 10000),
         name: body.name,
-        number: body.number,
-        id: Math.floor(Math.random() * 10000)
+        number: body.number        
     }
     persons = persons.concat(person)
 
     res.json(person)
 })
 
-const PORT = process.env || 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })

@@ -5,3 +5,13 @@ Content-Type: application/json
     "name": "added person from vs code",
     "number": "1234567890"
 }
+
+###
+
+POST https://thawing-coast-07191.herokuapp.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "added person from vs code",
+    "number": "1234567890"
+}

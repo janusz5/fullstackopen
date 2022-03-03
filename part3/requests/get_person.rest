@@ -1,1 +1,5 @@
-GET http://localhost:3001/api/persons/1
+GET http://localhost:3001/api/persons/2
+
+###
+
+GET https://thawing-coast-07191.herokuapp.com/api/persons/2
