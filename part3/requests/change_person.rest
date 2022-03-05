@@ -1,0 +1,18 @@
+PUT http://localhost:3001/api/persons/6223e233df343301b3e40ad0
+content-type: application/json
+
+{
+    "name": "added person from vs code",
+    "number": "12345"
+}
+
+
+###
+
+PUT https://thawing-coast-07191.herokuapp.com/api/persons/6223e233df343301b3e40ad0
+content-type: application/json
+
+{
+    "name": "added person from vs code",
+    "number": "12345"
+}
