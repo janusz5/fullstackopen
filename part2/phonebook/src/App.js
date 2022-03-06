@@ -48,9 +48,14 @@ const App = () => {
             setPersons(persons.map(mapPerson => mapPerson.name === newName ? responsePerson : mapPerson))
             setnotification({ className: "successfullOperation", message: `Changed ${responsePerson.name}` })
             setTimeout(() => setnotification(null), 5000)
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            setnotification({ className: "error", message: error.response.data.error })
+            setTimeout(() => setnotification(null), 5000)
           })
       }
-      else return
     }
     else {
       const personObject = {
@@ -63,24 +68,28 @@ const App = () => {
           setnotification({ className: "success", message: `Added ${person.name}` })
           setTimeout(() => setnotification(null), 5000)
           console.log(person, "added")
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch(error => {
+          setnotification({ className: "error", message: error.response.data.error })
+          setTimeout(() => setnotification(null), 5000)
         })
     }
-    setNewName('')
-    setNewNumber('')
   }
 
   const handleDeletion = (person) => {
     const confirmed = window.confirm(`Delete ${person.name}?`)
     if (confirmed) {
       personService.deletePerson(person.id)
-      .then(response => {
-        setnotification({ className: "success", message: `Deleted ${person.name}` })
-        setTimeout(() => setnotification(null), 5000)
-      })
-      .catch(error => {
-        setnotification({ className: "error", message: `Information of ${person.name} has already been removed from server`})
-        setTimeout(() => setnotification(null), 5000)
-      })
+        .then(response => {
+          setnotification({ className: "success", message: `Deleted ${person.name}` })
+          setTimeout(() => setnotification(null), 5000)
+        })
+        .catch(error => {
+          setnotification({ className: "error", message: `Information of ${person.name} has already been removed from server` })
+          setTimeout(() => setnotification(null), 5000)
+        })
       setPersons(persons.filter(arrPerson => arrPerson.id !== person.id))
     }
   }

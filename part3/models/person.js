@@ -13,8 +13,21 @@ mongoose.connect(url)
     })
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name: {
+        type: String,
+        minlength: 3,
+        required: true,
+        unique: true
+    },
+    number: {
+        type: String,
+        required: true,
+        minlength: 8,
+        validate: {
+            validator: v => /\d{2,3}-\d+/.test(v),
+            message: props => 'A Phone number must have 2 or 3 numbers then an hyphen and then again numbers!'
+        }
+    }
 })
 
 personSchema.set('toJSON', {

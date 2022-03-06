@@ -2,7 +2,7 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "added person from vs code"
+    "name": "test person"
 }
 
 ###
@@ -11,6 +11,24 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
+    "number": "123-123456789"
+}
+###
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "test person",
+    "number": "123"
+}
+###
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "test person",
     "number": "1234567890"
 }
 
@@ -20,8 +38,8 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "added person from vs code",
-    "number": "1234567890"
+    "name": "test person",
+    "number": "123-123456789"
 }
 
 ###
@@ -30,8 +48,8 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "added person from vs code",
-    "number": "1234567890"
+    "name": "test person",
+    "number": "123-123456789"
 }
 
 ###
@@ -42,7 +60,7 @@ POST https://thawing-coast-07191.herokuapp.com/api/persons
 Content-Type: application/json
 
 {
-    "name": "added person from vs code"
+    "name": "test person"
 }
 
 ###
@@ -51,7 +69,40 @@ POST https://thawing-coast-07191.herokuapp.com/api/persons
 Content-Type: application/json
 
 {
+    "number": "123-123456789"
+}
+
+
+###
+
+POST https://thawing-coast-07191.herokuapp.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "test person",
+    "number": "123"
+}
+
+
+###
+
+POST https://thawing-coast-07191.herokuapp.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "test person",
     "number": "1234567890"
+}
+
+
+###
+
+POST https://thawing-coast-07191.herokuapp.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "test person",
+    "number": "123-123456789"
 }
 
 ###
@@ -60,16 +111,6 @@ POST https://thawing-coast-07191.herokuapp.com/api/persons
 Content-Type: application/json
 
 {
-    "name": "added person from vs code",
-    "number": "1234567890"
-}
-
-###
-
-POST https://thawing-coast-07191.herokuapp.com/api/persons
-Content-Type: application/json
-
-{
-    "name": "added person from vs code",
-    "number": "1234567890"
+    "name": "test person",
+    "number": "123-123456789"
 }
