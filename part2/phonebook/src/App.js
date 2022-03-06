@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { React, useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import personService from "./services/persons"
+import personService from './services/persons'
 import Notification from './components/Notification'
 import './index.css'
 
@@ -16,7 +16,7 @@ const App = () => {
   useEffect(() => {
     personService.readAllPersons()
       .then(personsGet => {
-        console.log("set initial persons with axios")
+        console.log('set initial persons with axios')
         setPersons(personsGet)
       })
   }, [])
@@ -46,13 +46,13 @@ const App = () => {
         personService.updatePerson(personObject)
           .then(responsePerson => {
             setPersons(persons.map(mapPerson => mapPerson.name === newName ? responsePerson : mapPerson))
-            setnotification({ className: "successfullOperation", message: `Changed ${responsePerson.name}` })
+            setnotification({ className: 'successfullOperation', message: `Changed ${responsePerson.name}` })
             setTimeout(() => setnotification(null), 5000)
             setNewName('')
             setNewNumber('')
           })
           .catch(error => {
-            setnotification({ className: "error", message: error.response.data.error })
+            setnotification({ className: 'error', message: error.response.data.error })
             setTimeout(() => setnotification(null), 5000)
           })
       }
@@ -65,14 +65,14 @@ const App = () => {
       personService.createPerson(personObject)
         .then(person => {
           setPersons(persons.concat(person))
-          setnotification({ className: "success", message: `Added ${person.name}` })
+          setnotification({ className: 'success', message: `Added ${person.name}` })
           setTimeout(() => setnotification(null), 5000)
-          console.log(person, "added")
+          console.log(person, 'added')
           setNewName('')
           setNewNumber('')
         })
         .catch(error => {
-          setnotification({ className: "error", message: error.response.data.error })
+          setnotification({ className: 'error', message: error.response.data.error })
           setTimeout(() => setnotification(null), 5000)
         })
     }
@@ -82,12 +82,12 @@ const App = () => {
     const confirmed = window.confirm(`Delete ${person.name}?`)
     if (confirmed) {
       personService.deletePerson(person.id)
-        .then(response => {
-          setnotification({ className: "success", message: `Deleted ${person.name}` })
+        .then(() => {
+          setnotification({ className: 'success', message: `Deleted ${person.name}` })
           setTimeout(() => setnotification(null), 5000)
         })
-        .catch(error => {
-          setnotification({ className: "error", message: `Information of ${person.name} has already been removed from server` })
+        .catch(() => {
+          setnotification({ className: 'error', message: `Information of ${person.name} has already been removed from server` })
           setTimeout(() => setnotification(null), 5000)
         })
       setPersons(persons.filter(arrPerson => arrPerson.id !== person.id))
