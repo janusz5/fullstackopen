@@ -39,10 +39,11 @@ describe('backend api', () => {
     const response = await api.post('/api/blogs').send(newBlog)
     expect(response.status).toEqual(201)
     expect(response.headers['content-type']).toMatch(/application\/json/)
+    expect(response.body.likes).toEqual(1)
 
     const blogsDB = await helper.blogsInDb()
     expect(blogsDB.length).toEqual(helper.initialBlogs.length + 1)
-    
+
     const contents = blogsDB.map(b => b.title)
     expect(contents).toContain('Added Blog')
   })
@@ -83,6 +84,9 @@ describe('backend api', () => {
     const blogsAtStart = await helper.blogsInDb()
     const unchangedBlog = blogsAtStart[0]
     const changedBlogObject = {
+      title: unchangedBlog.title,
+      author: unchangedBlog.author,
+      url: unchangedBlog.url,
       likes: 100
     }
 
