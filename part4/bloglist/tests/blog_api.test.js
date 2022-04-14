@@ -3,11 +3,13 @@ const Blog = require('../models/blog')
 const app = require('../app')
 const helper = require('./test_helper')
 const supertest = require('supertest')
+const User = require('../models/user')
 
 const api = supertest(app)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
 
   for (let blog of helper.initialBlogs) {
     let blogObject = new Blog(blog)
@@ -98,6 +100,31 @@ describe('backend api', () => {
     const blogsDB = await helper.blogsInDb()
     const changedBlog = blogsDB.filter(b => b.id === unchangedBlog.id)[0]
     expect(changedBlog.likes).toEqual(changedBlogObject.likes)
+  })
+
+  test('incorrect user creation', async () => {
+    const onlyUsernameResponse = await api.post('/api/users').send({username: 'user'})
+    expect(onlyUsernameResponse.status).toEqual(400)
+    expect(onlyUsernameResponse.body.error).toMatch(/username and password need to be given with at least 3 characters/)
+
+    const onlyPasswordResponse = await api.post('/api/users').send({password: 'password'})
+    expect(onlyPasswordResponse.status).toEqual(400)
+    expect(onlyPasswordResponse.body.error).toMatch(/username and password need to be given with at least 3 characters/)
+
+    const shortUsernameResponse = await api.post('/api/users').send({username: 'u', password: 'password'})
+    expect(shortUsernameResponse.status).toEqual(400)
+    expect(shortUsernameResponse.body.error).toMatch(/username and password need to be given with at least 3 characters/)
+
+    const shortPasswordResponse = await api.post('/api/users').send({username: 'user', password: 'p'})
+    expect(shortPasswordResponse.status).toEqual(400)
+    expect(shortPasswordResponse.body.error).toMatch(/username and password need to be given with at least 3 characters/)
+  })
+
+  test('correct user creation', async () => {
+    const correctResponse = await api.post('/api/users').send({password: 'password', username: 'user', name: "User Name"})
+    expect(correctResponse.status).toEqual(201)
+    expect(correctResponse.body.username).toMatch(/user/)
+    expect(correctResponse.body.name).toMatch(/User Name/)
   })
 
   afterAll(() => {
