@@ -1,28 +1,31 @@
 const blogRouter = require('express').Router()
-const { response } = require('../app')
+const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
 blogRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', {username: 1, name: 1})
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
 blogRouter.post('/', async (request, response) => {
-  if (!request.body.title && !request.body.url) {
-    response.status(400).end()
-  } else {
-    const creator = await User.findOne({})
-    const blog = new Blog({
-      author: request.body.author,
-      title: request.body.title,
-      url: request.body.url,
-      likes: request.body.likes || 0,
-      user: creator.id
-    })
-    const savedBlog = await blog.save()
-    response.status(201).json(savedBlog)
-  }
+  if (!request.body.title && !request.body.url) return response.status(400).end()
+
+  const token = request.headers["authorization"].slice(7)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+
+  if (!decodedToken.id) return response.status(401).json({'error': 'incorrect token'})
+
+  const blog = new Blog({
+    author: request.body.author,
+    title: request.body.title,
+    url: request.body.url,
+    likes: request.body.likes || 0,
+    user: decodedToken.id
+  })
+  const savedBlog = await blog.save()
+
+  response.status(201).json(savedBlog)
 })
 
 blogRouter.delete('/:id', async (request, response) => {
