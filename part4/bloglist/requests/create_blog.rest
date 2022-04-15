@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlZTQ29kZVJlc3RDbGllbnQiLCJpZCI6IjYyNThhOGY4YmRkYTkyZTg1MDNiOTc3MCIsImlhdCI6MTY1MDAzODAzNywiZXhwIjoxNjUwMDQxNjM3fQ.yrRdytpfrhfrAa-1UchG6ldxvA63D0FSK-KiNvhODko
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlZTQ29kZVJlc3RDbGllbnQiLCJpZCI6IjYyNThhOGY4YmRkYTkyZTg1MDNiOTc3MCIsImlhdCI6MTY1MDA0MTg2NiwiZXhwIjoxNjUwMDQ1NDY2fQ.r3Qs7CBRxPraIdPxKcMP6VytThxh2mjo0EZXtifrYic
 
 {
     "title": "blog added from vs code rest client",

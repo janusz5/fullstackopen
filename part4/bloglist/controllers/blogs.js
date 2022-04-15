@@ -13,7 +13,7 @@ blogRouter.post('/', async (request, response) => {
 
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
-  if (!decodedToken.id) return response.status(401).json({'error': 'incorrect token'})
+  if (!decodedToken.id) return response.status(401).json({ 'error': 'incorrect token' })
 
   const blog = new Blog({
     author: request.body.author,
@@ -24,10 +24,24 @@ blogRouter.post('/', async (request, response) => {
   })
   const savedBlog = await blog.save()
 
+  await User.updateOne({ _id: decodedToken.id }, { $push: { blogs: savedBlog.id } })
+
   response.status(201).json(savedBlog)
 })
 
 blogRouter.delete('/:id', async (request, response) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id)
+    return response.status(401).json({ 'error': 'incorrect token' })
+
+  const blog = await Blog.findById(request.params.id)
+
+  if (!blog)
+    return response.status(204).end()
+
+  if (decodedToken.id != blog.user.toString())
+    return response.status(401).json({ 'error': 'only the user who created a blog can delete it' })
+
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })
