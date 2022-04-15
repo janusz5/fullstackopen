@@ -11,8 +11,7 @@ blogRouter.get('/', async (request, response) => {
 blogRouter.post('/', async (request, response) => {
   if (!request.body.title && !request.body.url) return response.status(400).end()
 
-  const token = request.headers["authorization"].slice(7)
-  const decodedToken = jwt.verify(token, process.env.SECRET)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
   if (!decodedToken.id) return response.status(401).json({'error': 'incorrect token'})
 
