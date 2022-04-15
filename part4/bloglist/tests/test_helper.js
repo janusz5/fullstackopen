@@ -48,8 +48,13 @@ const initialBlogs = [
     url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
     likes: 2,
     __v: 0
-  }  
+  }
 ]
+
+const testuser = {
+  username: 'testuser',
+  password: 'testpassword'
+}
 
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
@@ -57,5 +62,5 @@ const blogsInDb = async () => {
 }
 
 module.exports = {
-  initialBlogs, blogsInDb
+  initialBlogs, blogsInDb, testuser
 }

@@ -11,8 +11,11 @@ beforeEach(async () => {
   await Blog.deleteMany({})
   await User.deleteMany({})
 
+  const postResponse = await api.post('/api/users').send(helper.testuser)
+  const testUserId = postResponse.body.id
+
   for (let blog of helper.initialBlogs) {
-    let blogObject = new Blog(blog)
+    let blogObject = new Blog({...blog, user: testUserId})
     await blogObject.save()
   }
 })
@@ -37,8 +40,9 @@ describe('backend api', () => {
       url: "http://localhost",
       likes: 1
     }
-
-    const response = await api.post('/api/blogs').send(newBlog)
+    
+    const loginResponse = await api.post('/api/login').send({username: 'testuser', password: 'testpassword'})
+    const response = await api.post('/api/blogs').send(newBlog).set({'Authorization': `bearer ${loginResponse.body.token}`})
     expect(response.status).toEqual(201)
     expect(response.headers['content-type']).toMatch(/application\/json/)
     expect(response.body.likes).toEqual(1)
@@ -50,6 +54,21 @@ describe('backend api', () => {
     expect(contents).toContain('Added Blog')
   })
 
+  test('adding a blog is only allowed with a token', async () => {
+    const newBlog = {
+      title: "Added Blog",
+      author: "Supertest",
+      url: "http://localhost",
+      likes: 1
+    }
+    
+    const response = await api.post('/api/blogs').send(newBlog)
+    expect(response.status).toEqual(401)
+
+    const blogsDB = await helper.blogsInDb()
+    expect(blogsDB.length).toEqual(helper.initialBlogs.length)
+  })
+
   test('missing like property is amended with zero', async () => {
     const newBlog = {
       title: "Blog without likes",
@@ -57,7 +76,8 @@ describe('backend api', () => {
       url: "http://localhost"
     }
 
-    const response = await api.post('/api/blogs').send(newBlog)
+    const loginResponse = await api.post('/api/login').send({username: 'testuser', password: 'testpassword'})
+    const response = await api.post('/api/blogs').send(newBlog).set({'Authorization': `bearer ${loginResponse.body.token}`})
     expect(response.status).toEqual(201)
     expect(response.headers['content-type']).toMatch(/application\/json/)
     expect(response.body.likes).toEqual(0)
@@ -68,14 +88,15 @@ describe('backend api', () => {
       author: "Supertest",
       likes: 1
     }
-
-    await api.post('/api/blogs').send(newBlog).expect(400)
+    const loginResponse = await api.post('/api/login').send({username: 'testuser', password: 'testpassword'})
+    await api.post('/api/blogs').send(newBlog).set({'Authorization': `bearer ${loginResponse.body.token}`}).expect(400)
   })
 
   test('deleting a blog', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const deletedBlog = blogsAtStart[0]
-    await api.delete(`/api/blogs/${deletedBlog.id}`).expect(204)
+    const loginResponse = await api.post('/api/login').send({username: 'testuser', password: 'testpassword'})
+    await api.delete(`/api/blogs/${deletedBlog.id}`).set({'Authorization': `bearer ${loginResponse.body.token}`}).expect(204)
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd.length).toEqual(blogsAtStart.length - 1)
     const contents = blogsAtEnd.map(b => b.title)

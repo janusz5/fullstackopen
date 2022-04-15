@@ -30,7 +30,7 @@ blogRouter.post('/', userExtractor, async (request, response) => {
 
 blogRouter.delete('/:id', userExtractor, async (request, response) => {
   const user = request.user
-  console.log(user)
+  
   const blog = await Blog.findById(request.params.id)
 
   if (!blog)
