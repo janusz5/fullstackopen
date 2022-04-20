@@ -11,11 +11,13 @@ const Login = (props) => {
     try {
       const loggedInUser = await loginServise.login(username, password)
       window.localStorage.setItem('user', JSON.stringify(loggedInUser))
-      props.setUser(loggedInUser)
       setUsername('')
       setPassword('')
+      props.setUser(loggedInUser)
     }
     catch (exception) {
+      props.setNotification({statusType: 'error', message: 'wrong username or password'})
+      setTimeout(() => props.setNotification(null), 5000)
     }
   }
 

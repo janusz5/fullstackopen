@@ -14,6 +14,8 @@ const CreateNewBlog = (props) => {
     setAuthor('')
     setUrl('')
     props.setBlogs(props.blogs.concat(createdBog))
+    props.setNotification({statusType: 'success', message: `added a new blog ${createdBog.title} by ${createdBog.author}`})
+    setTimeout(() => props.setNotification(null), 5000)
   }
 
   return (
