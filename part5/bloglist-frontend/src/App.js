@@ -14,7 +14,10 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    setUser(window.localStorage.getItem('user'))
+    const loggedUserJSON = window.localStorage.getItem('user')
+    if (loggedUserJSON) {
+      setUser(JSON.parse(loggedUserJSON))
+    }
   }, [])
 
   const logout = () => {
