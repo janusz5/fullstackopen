@@ -10,6 +10,7 @@ const Login = (props) => {
     event.preventDefault()
     try {
       const loggedInUser = await loginServise.login(username, password)
+      window.localStorage.setItem('user', JSON.stringify(loggedInUser))
       props.setUser(loggedInUser)
       setUsername('')
       setPassword('')
