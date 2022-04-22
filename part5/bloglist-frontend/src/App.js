@@ -31,6 +31,14 @@ const App = () => {
     setUser(null)
   }
 
+  const likeBlog = async (blogId) => {
+    const newBlog = blogs.filter(blog => blog.id === blogId)[0]
+    newBlog.likes += 1
+    newBlog.user = newBlog.user.id
+    const updatedBlog = await blogService.updateBlog(newBlog, blogId)
+    setBlogs(blogs.map(blog => blog.id === blogId ? updatedBlog : blog))
+  }
+
   const createNewBlogRef = useRef()
 
 
@@ -50,7 +58,7 @@ const App = () => {
         <Togglable buttonLabel={'create new blog'} ref={createNewBlogRef}>
           <CreateNewBlog user={user} blogs={blogs} setBlogs={setBlogs} setNotification={setNotification} createNewBlogRef={createNewBlogRef}/>
         </Togglable>
-        {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+        {blogs.map(blog => <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />)}
       </>
     )
 }
