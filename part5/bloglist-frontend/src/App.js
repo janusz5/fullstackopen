@@ -5,6 +5,7 @@ import CreateNewBlog from './components/CreateNewBlog'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import './index.css'
+import Toggable from './components/Toggable'
 
 
 const App = () => {
@@ -43,7 +44,9 @@ const App = () => {
         <Notification notification={notification} />
         <h2>blogs</h2>
         <div>{user.name} is logged in <button onClick={logout}>log out</button></div>
-        <CreateNewBlog user={user} blogs={blogs} setBlogs={setBlogs} setNotification={setNotification}/>
+        <Toggable buttonLabel={'create new blog'}>
+          <CreateNewBlog user={user} blogs={blogs} setBlogs={setBlogs} setNotification={setNotification} />
+        </Toggable>
         {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
       </>
     )
