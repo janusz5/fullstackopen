@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Login from './components/Login'
 import CreateNewBlog from './components/CreateNewBlog'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import './index.css'
-import Toggable from './components/Toggable'
+import Togglable from './components/Togglable'
 
 
 const App = () => {
@@ -31,6 +31,9 @@ const App = () => {
     setUser(null)
   }
 
+  const createNewBlogRef = useRef()
+
+
   if (user === null)
     return (
       <>
@@ -44,9 +47,9 @@ const App = () => {
         <Notification notification={notification} />
         <h2>blogs</h2>
         <div>{user.name} is logged in <button onClick={logout}>log out</button></div>
-        <Toggable buttonLabel={'create new blog'}>
-          <CreateNewBlog user={user} blogs={blogs} setBlogs={setBlogs} setNotification={setNotification} />
-        </Toggable>
+        <Togglable buttonLabel={'create new blog'} ref={createNewBlogRef}>
+          <CreateNewBlog user={user} blogs={blogs} setBlogs={setBlogs} setNotification={setNotification} createNewBlogRef={createNewBlogRef}/>
+        </Togglable>
         {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
       </>
     )
