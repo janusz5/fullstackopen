@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogs(blogs.sort((blog1, blog2) => blog1.likes <= blog2.likes))
     )
   }, [])
 
@@ -36,7 +36,10 @@ const App = () => {
     newBlog.likes += 1
     newBlog.user = newBlog.user.id
     const updatedBlog = await blogService.updateBlog(newBlog, blogId)
-    setBlogs(blogs.map(blog => blog.id === blogId ? updatedBlog : blog))
+    setBlogs(
+      blogs.map(blog => blog.id === blogId ? updatedBlog : blog)
+        .sort((blog1, blog2) => blog1.likes <= blog2.likes)
+    )
   }
 
   const createNewBlogRef = useRef()
@@ -56,7 +59,7 @@ const App = () => {
         <h2>blogs</h2>
         <div>{user.name} is logged in <button onClick={logout}>log out</button></div>
         <Togglable buttonLabel={'create new blog'} ref={createNewBlogRef}>
-          <CreateNewBlog user={user} blogs={blogs} setBlogs={setBlogs} setNotification={setNotification} createNewBlogRef={createNewBlogRef}/>
+          <CreateNewBlog user={user} blogs={blogs} setBlogs={setBlogs} setNotification={setNotification} createNewBlogRef={createNewBlogRef} />
         </Togglable>
         {blogs.map(blog => <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />)}
       </>
