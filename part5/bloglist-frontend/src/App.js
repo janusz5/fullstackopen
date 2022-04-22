@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs.sort((blog1, blog2) => blog1.likes <= blog2.likes))
+      setBlogs(blogs.sort((blog1, blog2) => blog1.likes < blog2.likes))
     )
   }, [])
 
@@ -38,8 +38,13 @@ const App = () => {
     const updatedBlog = await blogService.updateBlog(newBlog, blogId)
     setBlogs(
       blogs.map(blog => blog.id === blogId ? updatedBlog : blog)
-        .sort((blog1, blog2) => blog1.likes <= blog2.likes)
+        .sort((blog1, blog2) => blog1.likes < blog2.likes)
     )
+  }
+
+  const removeBlog = async (blogId) => {
+    await blogService.deleteBlog(blogId, user.token)
+    setBlogs(blogs.filter(blog => blog.id !== blogId))
   }
 
   const createNewBlogRef = useRef()
@@ -61,7 +66,7 @@ const App = () => {
         <Togglable buttonLabel={'create new blog'} ref={createNewBlogRef}>
           <CreateNewBlog user={user} blogs={blogs} setBlogs={setBlogs} setNotification={setNotification} createNewBlogRef={createNewBlogRef} />
         </Togglable>
-        {blogs.map(blog => <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />)}
+        {blogs.map(blog => <Blog key={blog.id} blog={blog} likeBlog={likeBlog} removeBlog={removeBlog} user={user}/>)}
       </>
     )
 }
