@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react'
 
-const Notification = ({notification}) => {
+const Notification = ({ notification }) => {
   if (notification === null) {
-      return null
+    return null
   }
 
   return (
-      <div className={notification.statusType}>
-          {notification.message}
-      </div>
+    <div className={notification.statusType}>
+      {notification.message}
+    </div>
   )
 }
 

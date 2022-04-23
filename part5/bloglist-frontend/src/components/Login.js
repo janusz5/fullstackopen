@@ -1,6 +1,7 @@
-import React from "react";
-import { useState } from "react";
-import loginServise from "../services/login"
+import React from 'react'
+import { useState } from 'react'
+import loginServise from '../services/login'
+import PropTypes from 'prop-types'
 
 const Login = (props) => {
   const [username, setUsername] = useState('')
@@ -16,7 +17,7 @@ const Login = (props) => {
       props.setUser(loggedInUser)
     }
     catch (exception) {
-      props.setNotification({statusType: 'error', message: 'wrong username or password'})
+      props.setNotification({ statusType: 'error', message: 'wrong username or password' })
       setTimeout(() => props.setNotification(null), 5000)
     }
   }
@@ -33,6 +34,11 @@ const Login = (props) => {
       </form>
     </>
   )
+}
+
+Login.propTypes = {
+  setUser: PropTypes.func.isRequired,
+  setNotification: PropTypes.func.isRequired
 }
 
 export default Login
