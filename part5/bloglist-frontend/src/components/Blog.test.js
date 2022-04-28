@@ -51,4 +51,25 @@ describe('Blog tests', () => {
     expect(div).toHaveTextContent('testURL')
     expect(div).toHaveTextContent(0)
   })
+
+  test('clicking like button calls event handler', async () => {
+    const blog = {
+      title: 'testTitle',
+      author: 'testAuthor',
+      url: 'testURL',
+      likes: 0,
+      user: {
+        name: 'testUserName'
+      }
+    }
+
+    const mockHandler = jest.fn()
+    render(<Blog blog={blog} user={{ username: '' }} likeBlog={mockHandler} />)
+
+    const likeButton = await screen.findByText(/like/)
+    const user = userEvent.setup()
+    await user.click(likeButton)
+    await user.click(likeButton)
+    expect(mockHandler.mock.calls).toHaveLength(2)
+  })
 })
