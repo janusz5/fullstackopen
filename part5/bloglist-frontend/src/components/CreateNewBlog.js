@@ -29,7 +29,7 @@ const CreateNewBlog = (props) => {
         <input type="text" id="author" name="author" value={author} onChange={({ target }) => setAuthor(target.value)}/><br/>
         <label htmlFor="url">url:</label>
         <input type="text" id="url" name="url" value={url} onChange={({ target }) => setUrl(target.value)}/><br/>
-        <input type="submit" value="create"/>
+        <input type="submit" value="create" id="submitButton"/>
       </form>
     </>
   )
