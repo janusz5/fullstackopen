@@ -33,4 +33,22 @@ describe('Blog app', function () {
         .and('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.request('POST', 'http://localhost:3003/api/login', { username: 'VSCodeRestClient', password: 'password' })
+        .then(response => {
+          window.localStorage.setItem('user', JSON.stringify(response.body))
+        })
+      cy.visit('http://localhost:3000')
+    })
+
+    it('A blog can be created', function () {
+      cy.contains('create new blog').click()
+      cy.get('#title').type('test blog')
+      cy.get('#author').type('test author')
+      cy.get('#url').type('test url')
+      cy.get('#submitButton').click()
+      cy.get('.blog').contains('test blog test author')
+    })
+  })
 })
