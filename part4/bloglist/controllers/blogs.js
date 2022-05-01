@@ -25,7 +25,9 @@ blogRouter.post('/', userExtractor, async (request, response) => {
 
   await User.updateOne({ _id: user.id }, { $push: { blogs: savedBlog.id } })
 
-  response.status(201).json(savedBlog)
+  const populatedBlog = await savedBlog.populate('user', { username: 1, name: 1 })
+
+  response.status(201).json(populatedBlog)
 })
 
 blogRouter.delete('/:id', userExtractor, async (request, response) => {

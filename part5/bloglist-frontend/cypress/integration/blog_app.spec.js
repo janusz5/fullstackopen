@@ -35,11 +35,7 @@ describe('Blog app', function () {
   })
   describe('When logged in', function () {
     beforeEach(function () {
-      cy.request('POST', 'http://localhost:3003/api/login', { username: 'VSCodeRestClient', password: 'password' })
-        .then(response => {
-          window.localStorage.setItem('user', JSON.stringify(response.body))
-        })
-      cy.visit('http://localhost:3000')
+      cy.login({ username: 'VSCodeRestClient', password: 'password' })
     })
 
     it('A blog can be created', function () {
@@ -50,5 +46,35 @@ describe('Blog app', function () {
       cy.get('#submitButton').click()
       cy.get('.blog').contains('test blog test author')
     })
+
+    it('A blog can be liked', function () {
+      cy.createBlog({ title: 'test blog', author: 'test author', url: 'test url' })
+
+      cy.get('.blog').contains('view').click()
+      cy.get('.blog').contains('0')
+      cy.get('.blog').contains('like').click()
+      cy.get('.blog').contains('1')
+    })
+
+    it('A blog can be deleted by the creator', function () {
+      cy.createBlog({ title: 'test blog', author: 'test author', url: 'test url' })
+
+      cy.get('.blog').contains('view').click()
+      cy.get('.blog').contains('remove').click()
+      cy.get('html').should('not.contain', 'test blog test author')
+    })
+
+    it('A blog can not be deleted by another user', function () {
+      cy.createBlog({ title: 'test blog', author: 'test author', url: 'test url' })
+
+      cy.contains('log out').click()
+      cy.request('POST', 'http://localhost:3003/api/users',
+        { username: 'user2', password: 'password', name: 'user 2' })
+      cy.login({ username: 'user2', password: 'password' })
+
+      cy.get('.blog').contains('view').click()
+      cy.get('.blog').should('not.contain', 'remove')
+    })
+
   })
 })
