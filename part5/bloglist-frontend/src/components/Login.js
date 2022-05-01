@@ -25,7 +25,7 @@ const Login = (props) => {
   return (
     <>
       <h2>log in to application</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleLogin} id={'loginForm'}>
         <label htmlFor="username">username:</label>
         <input type="text" id="username" name="username" value={username} onChange={({ target }) => setUsername(target.value)} /><br />
         <label htmlFor="password">password:</label>
