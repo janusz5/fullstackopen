@@ -76,5 +76,26 @@ describe('Blog app', function () {
       cy.get('.blog').should('not.contain', 'remove')
     })
 
+    it('Blogs are ordered by likes', function () {
+      cy.createBlog({ title: 'test blog 1', author: 'test author', url: 'test url', likes: 1 })
+      cy.createBlog({ title: 'test blog 2', author: 'test author', url: 'test url', likes: 10 })
+      cy.createBlog({ title: 'test blog 3', author: 'test author', url: 'test url', likes: 4 })
+
+      cy.get('#blogs>.blog').eq(0).should('contain', 'test blog 2')
+      cy.get('#blogs>.blog').eq(1).should('contain', 'test blog 3')
+      cy.get('#blogs>.blog').eq(2).should('contain', 'test blog 1')
+
+
+      cy.contains('test blog 1').parent().contains('view').click()
+
+      cy.contains('test blog 1').parent().contains('like').click()
+      cy.contains('test blog 1').parent().contains('like').click()
+      cy.contains('test blog 1').parent().contains('like').click()
+      cy.contains('test blog 1').parent().contains('like').click()
+
+      cy.get('#blogs>.blog').eq(0).should('contain', 'test blog 2')
+      cy.get('#blogs>.blog').eq(1).should('contain', 'test blog 1')
+      cy.get('#blogs>.blog').eq(2).should('contain', 'test blog 3')
+    })
   })
 })
