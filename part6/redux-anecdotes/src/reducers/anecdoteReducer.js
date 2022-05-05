@@ -23,6 +23,8 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'LIKE':
       return state.map(anecdote => action.id !== anecdote.id ? anecdote : { ...anecdote, votes: anecdote.votes + 1 })
+    case 'ADD':
+      return [...state, asObject(action.anecdote)]
     default:
       return state
   }
