@@ -7,11 +7,11 @@ const notificationSlide = createSlice({
   initialState,
   reducers: {
     setNotification(state, action) {
-      const notification = action.prototype
-      state = notification
+      const notification = action.payload
+      return notification
     },
     unsetNotification(state, action) {
-      state = null
+      return null
     }
   }
 })
