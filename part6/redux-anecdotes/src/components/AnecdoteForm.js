@@ -10,8 +10,8 @@ const AnecdoteForm = (props) => {
     event.target.newAnecdote.value = ''
     const anecdote = await anecdoteService.createNew(anecdoteContent)
     props.addAnecdote(anecdote)
-    props.setNotification(`added anecdote ${anecdote.content}`)
-    setTimeout(() => props.unsetNotification(), 5000)
+    const timeoutID = setTimeout(() => props.unsetNotification(), 5000)
+    props.setNotification({message: `added anecdote ${anecdote.content}`, timeoutID}) 
   }
 
   return (

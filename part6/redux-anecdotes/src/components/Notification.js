@@ -10,7 +10,7 @@ const Notification = (props) => {
   if (props.notification == null) return (<></>)
   else return (
     <div style={style}>
-      {props.notification}
+      {props.notification.message}
     </div>
   )
 }

@@ -7,8 +7,10 @@ const notificationSlide = createSlice({
   initialState,
   reducers: {
     setNotification(state, action) {
-      const notification = action.payload
-      return notification
+      const message = action.payload.message
+      const timeoutID = action.payload.timeoutID
+      if(state !== null) clearTimeout(state.timeoutID)
+      return {message, timeoutID}
     },
     unsetNotification(state, action) {
       return null
