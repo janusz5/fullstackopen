@@ -1,19 +1,17 @@
-import { useDispatch } from "react-redux"
+import { connect } from "react-redux"
 import { addAnecdote } from "../reducers/anecdoteReducer"
 import { setNotification, unsetNotification } from "../reducers/notificationReducer"
 import anecdoteService from "../services/anecdotes"
 
-const AnecdoteForm = () => {
-  const dispatch = useDispatch()
-
+const AnecdoteForm = (props) => {
   const handleAddingAnecdote = async (event) => {
     event.preventDefault()
     const anecdoteContent = event.target.newAnecdote.value
     event.target.newAnecdote.value = ''
     const anecdote = await anecdoteService.createNew(anecdoteContent)
-    dispatch(addAnecdote(anecdote))
-    dispatch(setNotification(`added anecdote ${anecdote.content}`))
-    setTimeout(() => dispatch(unsetNotification()), 5000)
+    props.addAnecdote(anecdote)
+    props.setNotification(`added anecdote ${anecdote.content}`)
+    setTimeout(() => props.unsetNotification(), 5000)
   }
 
   return (
@@ -27,4 +25,5 @@ const AnecdoteForm = () => {
   )
 }
 
-export default AnecdoteForm
+
+export default connect(null, {addAnecdote, setNotification, unsetNotification})(AnecdoteForm)

@@ -34,6 +34,11 @@
       "content": "anecdote added with the frontend",
       "votes": 0,
       "id": "7JYsjfw"
+    },
+    {
+      "content": "anecdote added by using connect",
+      "votes": 0,
+      "id": "5qDkA7w"
     }
   ]
 }
