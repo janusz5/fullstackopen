@@ -1,0 +1,18 @@
+### Correct Login
+POST http://localhost:3003/api/login
+content-type: application/json
+
+{
+    "username": "VSCodeRestClient",
+    "password": "password"
+}
+
+
+### Incorrect Login
+POST http://localhost:3003/api/login
+content-type: application/json
+
+{
+    "username": "VSCodeRestClient2",
+    "password": "wrong"
+}
