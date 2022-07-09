@@ -1,11 +1,15 @@
 import React from "react";
 import { useState } from "react";
-import loginServise from "../services/login";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import loginServise from "../services/login";
+import { errorNotification, unsetNotification } from "../reducers/notficationReducer";
+
 
 const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch()
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -16,11 +20,8 @@ const Login = (props) => {
       setPassword("");
       props.setUser(loggedInUser);
     } catch (exception) {
-      props.setNotification({
-        statusType: "error",
-        message: "wrong username or password",
-      });
-      setTimeout(() => props.setNotification(null), 5000);
+      const timeoutId = setTimeout(() => dispatch(unsetNotification()), 5000);
+      dispatch(errorNotification({message: "wrong username or password", timeoutId}))      
     }
   };
 
@@ -50,11 +51,6 @@ const Login = (props) => {
       </form>
     </>
   );
-};
-
-Login.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  setNotification: PropTypes.func.isRequired,
 };
 
 export default Login;
