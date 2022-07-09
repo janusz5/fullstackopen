@@ -1,22 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setAllBlogs } from "./reducers/blogReducer";
 import Blog from "./components/Blog";
 import Login from "./components/Login";
 import CreateNewBlog from "./components/CreateNewBlog";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
-import "./index.css";
 import Togglable from "./components/Togglable";
+import "./index.css";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs_old, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
+
+  const dispatch = useDispatch();
+  const blogs = useSelector((state) => state.blogs);
 
   useEffect(() => {
     blogService
       .getAll()
-      .then((blogs) =>
-        setBlogs(blogs.sort((blog1, blog2) => blog1.likes < blog2.likes))
-      );
+      .then((blogsBackend) => dispatch(setAllBlogs(blogsBackend)));
   }, []);
 
   useEffect(() => {
@@ -60,18 +63,13 @@ const App = () => {
   else
     return (
       <>
-        <Notification  />
+        <Notification />
         <h2>blogs</h2>
         <div>
           {user.name} is logged in <button onClick={logout}>log out</button>
         </div>
         <Togglable buttonLabel={"create new blog"} ref={createNewBlogRef}>
-          <CreateNewBlog
-            user={user}
-            blogs={blogs}
-            setBlogs={setBlogs}
-            createNewBlogRef={createNewBlogRef}
-          />
+          <CreateNewBlog user={user} createNewBlogRef={createNewBlogRef} />
         </Togglable>
         <div id="blogs">
           {blogs.map((blog) => (
