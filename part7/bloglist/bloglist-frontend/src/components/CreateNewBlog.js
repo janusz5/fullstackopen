@@ -2,18 +2,22 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import blogService from "../services/blogs";
-import { successNotification, unsetNotification } from "../reducers/notficationReducer";
+import {
+  successNotification,
+  unsetNotification,
+} from "../reducers/notficationReducer";
+import { addBlog } from "../reducers/blogReducer";
 
 const CreateNewBlog = (props) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const createBlogHandler = async (event) => {
     event.preventDefault();
-    const createdBog = await blogService.createBlog(
+    const createdBlog = await blogService.createBlog(
       title,
       author,
       url,
@@ -23,9 +27,14 @@ const CreateNewBlog = (props) => {
     setAuthor("");
     setUrl("");
     props.createNewBlogRef.current.toggleVisibility();
-    props.setBlogs(props.blogs.concat(createdBog));
+    dispatch(addBlog(createdBlog))
     const timeoutId = setTimeout(() => dispatch(unsetNotification()), 5000);
-    dispatch(successNotification({message: `added a new blog ${createdBog.title} by ${createdBog.author}`, timeoutId}))
+    dispatch(
+      successNotification({
+        message: `added a new blog ${createdBlog.title} by ${createdBlog.author}`,
+        timeoutId,
+      })
+    );
   };
 
   return (
