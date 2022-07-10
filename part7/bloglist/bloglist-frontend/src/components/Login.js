@@ -6,6 +6,7 @@ import {
   errorNotification,
   unsetNotification,
 } from "../reducers/notficationReducer";
+import { loginUser } from "../reducers/userReducer";
 
 const Login = (props) => {
   const [username, setUsername] = useState("");
@@ -19,7 +20,7 @@ const Login = (props) => {
       window.localStorage.setItem("user", JSON.stringify(loggedInUser));
       setUsername("");
       setPassword("");
-      props.setUser(loggedInUser);
+      dispatch(loginUser(loggedInUser));
     } catch (exception) {
       const timeoutId = setTimeout(() => dispatch(unsetNotification()), 5000);
       dispatch(

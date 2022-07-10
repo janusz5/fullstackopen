@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import blogService from "../services/blogs";
 import {
   successNotification,
@@ -14,6 +14,7 @@ const CreateNewBlog = (props) => {
   const [url, setUrl] = useState("");
 
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const createBlogHandler = async (event) => {
     event.preventDefault();
@@ -21,7 +22,7 @@ const CreateNewBlog = (props) => {
       title,
       author,
       url,
-      props.user.token
+      user.token
     );
     setTitle("");
     setAuthor("");
