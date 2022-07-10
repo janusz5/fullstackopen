@@ -10,7 +10,6 @@ import Togglable from "./components/Togglable";
 import "./index.css";
 
 const App = () => {
-  const [blogs_old, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
 
   const dispatch = useDispatch();
@@ -32,23 +31,6 @@ const App = () => {
   const logout = () => {
     window.localStorage.removeItem("user");
     setUser(null);
-  };
-
-  const likeBlog = async (blogId) => {
-    const newBlog = blogs.filter((blog) => blog.id === blogId)[0];
-    newBlog.likes += 1;
-    newBlog.user = newBlog.user.id;
-    const updatedBlog = await blogService.updateBlog(newBlog, blogId);
-    setBlogs(
-      blogs
-        .map((blog) => (blog.id === blogId ? updatedBlog : blog))
-        .sort((blog1, blog2) => blog1.likes < blog2.likes)
-    );
-  };
-
-  const removeBlog = async (blogId) => {
-    await blogService.deleteBlog(blogId, user.token);
-    setBlogs(blogs.filter((blog) => blog.id !== blogId));
   };
 
   const createNewBlogRef = useRef();
@@ -73,13 +55,7 @@ const App = () => {
         </Togglable>
         <div id="blogs">
           {blogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              likeBlog={likeBlog}
-              removeBlog={removeBlog}
-              user={user}
-            />
+            <Blog key={blog.id} blog={blog} user={user} />
           ))}
         </div>
       </>

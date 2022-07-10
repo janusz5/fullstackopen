@@ -27,7 +27,7 @@ const CreateNewBlog = (props) => {
     setAuthor("");
     setUrl("");
     props.createNewBlogRef.current.toggleVisibility();
-    dispatch(addBlog(createdBlog))
+    dispatch(addBlog(createdBlog));
     const timeoutId = setTimeout(() => dispatch(unsetNotification()), 5000);
     dispatch(
       successNotification({
