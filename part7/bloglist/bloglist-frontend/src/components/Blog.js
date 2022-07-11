@@ -1,24 +1,17 @@
-import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import blogService from "../services/blogs";
 import { removeBlog, updateBlog } from "../reducers/blogReducer";
 
-const Blog = ({ blog }) => {
-  const [visible, setVisible] = useState(false);
-
+const Blog = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
-  };
-
-  const buttonText = visible ? "hide" : "view";
-  let contentVisible = { display: visible ? "" : "none" };
+  const blogId = useParams().blogId;
+  const blogs = useSelector((state) => state.blogs);
+  if (blogs.length === 0) return null;
+  const blog = blogs.filter((blog) => blog.id === blogId)[0];
 
   const likeBlog = async () => {
     let newBlog = { ...blog };
@@ -28,39 +21,29 @@ const Blog = ({ blog }) => {
     dispatch(updateBlog({ blogId: blog.id, updatedBlog: updatedBlog }));
   };
 
-  const removeButtonHandler = async () => {
+  const deleteBlog = async () => {
     if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
+      navigate("/");
       await blogService.deleteBlog(blog.id, user.token);
       dispatch(removeBlog(blog.id));
     }
   };
 
-  const getDeleteButton = () => {
-    if (blog.user.username === user.username) {
-      return (
-        <div>
-          <button onClick={removeButtonHandler}>remove</button>
-        </div>
-      );
-    } else {
-      return <></>;
-    }
-  };
-
   return (
-    <div style={blogStyle} className={"blog"}>
+    <div>
+      <h2>
+        '{blog.title}' by '{blog.author}'
+      </h2>
+      <a href={blog.url}>{blog.url}</a>
       <div>
-        {blog.title} {blog.author}{" "}
-        <button onClick={() => setVisible(!visible)}>{buttonText}</button>
+        {blog.likes} <button onClick={() => likeBlog()}>like</button>
       </div>
-      <div style={contentVisible} className={"hiddenContent"}>
-        <div>{blog.url}</div>
+      <div>added by {blog.user.name}</div>
+      {blog.user.username === user.username && (
         <div>
-          {blog.likes} <button onClick={() => likeBlog()}>like</button>
+          <button onClick={deleteBlog}>remove</button>
         </div>
-        <div>{blog.user.name}</div>
-        {getDeleteButton()}
-      </div>
+      )}
     </div>
   );
 };

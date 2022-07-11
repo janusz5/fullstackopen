@@ -7,7 +7,7 @@ const usersSlice = createSlice({
     setAllUsers(state, action) {
       const users = action.payload;
       return users;
-    }
+    },
   },
 });
 

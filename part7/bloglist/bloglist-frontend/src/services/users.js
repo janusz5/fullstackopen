@@ -7,5 +7,5 @@ const getUsers = async () => {
   return response.data;
 };
 
-const usersService = { getUsers }
+const usersService = { getUsers };
 export default usersService;

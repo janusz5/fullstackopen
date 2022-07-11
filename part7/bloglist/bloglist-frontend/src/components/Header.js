@@ -2,8 +2,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../reducers/userReducer";
 
 const Header = () => {
-  const dispatch = useDispatch()
-  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const logout = () => {
     dispatch(logoutUser());
@@ -11,12 +11,13 @@ const Header = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
+      <h1>blogs</h1>
+      <div>{user.name} is logged in</div>
       <div>
-        {user.name} is logged in <button onClick={logout}>log out</button>
+        <button onClick={logout}>log out</button>
       </div>
     </div>
   );
 };
 
-export default Header
+export default Header;

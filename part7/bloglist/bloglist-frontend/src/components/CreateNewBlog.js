@@ -9,11 +9,10 @@ import {
 import { addBlog } from "../reducers/blogReducer";
 
 const CreateNewBlog = (props) => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
-
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const createBlogHandler = async (event) => {
@@ -24,10 +23,6 @@ const CreateNewBlog = (props) => {
       url,
       user.token
     );
-    setTitle("");
-    setAuthor("");
-    setUrl("");
-    props.createNewBlogRef.current.toggleVisibility();
     dispatch(addBlog(createdBlog));
     const timeoutId = setTimeout(() => dispatch(unsetNotification()), 5000);
     dispatch(
@@ -36,6 +31,10 @@ const CreateNewBlog = (props) => {
         timeoutId,
       })
     );
+    props.createNewBlogRef.current.toggleVisibility();
+    setTitle("");
+    setAuthor("");
+    setUrl("");
   };
 
   return (

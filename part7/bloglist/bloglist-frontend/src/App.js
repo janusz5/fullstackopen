@@ -7,6 +7,7 @@ import blogService from "./services/blogs";
 import usersService from "./services/users";
 import Header from "./components/Header";
 import Blogs from "./components/Blogs";
+import Blog from "./components/Blog";
 import Login from "./components/Login";
 import Notification from "./components/Notification";
 import Users from "./components/Users";
@@ -40,8 +41,10 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Blogs />} />
-          <Route path="/users" element={<Users />}/>
+          <Route path="/users" element={<Users />} />
           <Route path="/users/:userId" element={<User />} />
+          <Route path="/blogs/:blogId" element={<Blog />} />
+          <Route path="*" element={<h1>404 - Not Found</h1>} />
         </Routes>
       </BrowserRouter>
     );
