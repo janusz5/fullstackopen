@@ -44,7 +44,6 @@ const App = () => {
           <Route path="/users" element={<Users />} />
           <Route path="/users/:userId" element={<User />} />
           <Route path="/blogs/:blogId" element={<Blog />} />
-          <Route path="*" element={<h1>404 - Not Found</h1>} />
         </Routes>
       </BrowserRouter>
     );
