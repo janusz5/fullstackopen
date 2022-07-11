@@ -17,10 +17,9 @@ const Login = (props) => {
     event.preventDefault();
     try {
       const loggedInUser = await loginServise.login(username, password);
-      window.localStorage.setItem("user", JSON.stringify(loggedInUser));
+      dispatch(loginUser(loggedInUser));
       setUsername("");
       setPassword("");
-      dispatch(loginUser(loggedInUser));
     } catch (exception) {
       const timeoutId = setTimeout(() => dispatch(unsetNotification()), 5000);
       dispatch(
