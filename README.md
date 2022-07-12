@@ -1,2 +1,2 @@
 # fullstackopen
-Repository for the Full Stack Open Course: https://fullstackopen.com/en/
+Repository for the Full Stack Open Course of the University of Helsinki: https://fullstackopen.com/en/
