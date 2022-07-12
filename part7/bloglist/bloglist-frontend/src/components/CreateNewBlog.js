@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Button, Form } from "react-bootstrap";
 import blogService from "../services/blogs";
 import {
   successNotification,
@@ -39,37 +40,42 @@ const CreateNewBlog = (props) => {
 
   return (
     <>
-      <h2>create new blog</h2>
-      <form onSubmit={createBlogHandler}>
-        <label htmlFor="title">title:</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-        <br />
-        <label htmlFor="author">author:</label>
-        <input
-          type="text"
-          id="author"
-          name="author"
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-        <br />
-        <label htmlFor="url">url:</label>
-        <input
-          type="text"
-          id="url"
-          name="url"
-          value={url}
-          onChange={({ target }) => setUrl(target.value)}
-        />
-        <br />
-        <input type="submit" value="create" id="submitButton" />
-      </form>
+      <h2>Create New Blog</h2>
+      <Form onSubmit={createBlogHandler} style={{ paddingBottom: 7 }}>
+        <Form.Group>
+          <Form.Label htmlFor="title">Title:</Form.Label>
+          <Form.Control
+            type="text"
+            id="title"
+            name="title"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label htmlFor="author">Author:</Form.Label>
+          <Form.Control
+            type="text"
+            id="author"
+            name="author"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label htmlFor="url">URL:</Form.Label>
+          <Form.Control
+            type="text"
+            id="url"
+            name="url"
+            value={url}
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </Form.Group>
+        <Button type="submit" id="submitButton">
+          Create
+        </Button>
+      </Form>
     </>
   );
 };

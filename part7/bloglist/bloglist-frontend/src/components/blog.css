@@ -1,0 +1,17 @@
+#blogtitle {
+  font-weight: bold;
+}
+
+#blogauthor {
+  font-weight: bold;
+}
+
+#blogurl,
+#blogadder,
+#bloglikes {
+  font-size: 1.1rem;
+  border: solid;
+  border-width: 1px;
+  padding: 2px;
+  margin: 5px;
+}

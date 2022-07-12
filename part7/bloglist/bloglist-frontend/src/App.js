@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllBlogs } from "./reducers/blogReducer";
 import { setAllUsers } from "./reducers/usersReducer";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import blogService from "./services/blogs";
 import usersService from "./services/users";
 import Header from "./components/Header";
@@ -13,6 +13,7 @@ import Notification from "./components/Notification";
 import Users from "./components/Users";
 import "./index.css";
 import User from "./components/User";
+import { Container } from "react-bootstrap";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const App = () => {
     );
   else
     return (
-      <BrowserRouter>
+      <Container>
         <Notification />
         <Header />
         <Routes>
@@ -45,7 +46,7 @@ const App = () => {
           <Route path="/users/:userId" element={<User />} />
           <Route path="/blogs/:blogId" element={<Blog />} />
         </Routes>
-      </BrowserRouter>
+      </Container>
     );
 };
 

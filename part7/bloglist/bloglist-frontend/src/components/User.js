@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { ListGroup } from "react-bootstrap";
 
 const User = () => {
   const userId = useParams().userId;
@@ -11,16 +12,16 @@ const User = () => {
   return (
     <div>
       <h2>{user.name}</h2>
-      <h3>added blogs</h3>
-      <ul>
+      <h3>Added Blogs</h3>
+      <ListGroup>
         {user.blogs.map((blog) => {
           return (
-            <li key={blog.title}>
+            <ListGroup.Item key={blog.title}>
               <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-            </li>
+            </ListGroup.Item>
           );
         })}
-      </ul>
+      </ListGroup>
     </div>
   );
 };

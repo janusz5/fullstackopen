@@ -2,24 +2,25 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { Button, Form, ListGroup } from "react-bootstrap";
 import blogService from "../services/blogs";
 import { removeBlog, updateBlog } from "../reducers/blogReducer";
+import "./blog.css";
 
 const Blog = () => {
-  const [comment, setComment] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [comment, setComment] = useState("");
   const user = useSelector((state) => state.user);
   const blogId = useParams().blogId;
-  const blogs = useSelector((state) => state.blogs);
-  if (blogs.length === 0) return null;
-  const blog = blogs.filter((blog) => blog.id === blogId)[0];
+  const blog = useSelector(
+    (state) => state.blogs.filter((blog) => blog.id === blogId)[0]
+  );
+  if (!blog) return null;
 
   const likeBlog = async () => {
-    let newBlog = { ...blog };
-    newBlog.likes += 1;
-    newBlog.user = blog.user.id;
-    const updatedBlog = await blogService.updateBlog(newBlog, blog.id);
+    let likedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id };
+    const updatedBlog = await blogService.updateBlog(likedBlog, blog.id);
     dispatch(updateBlog({ blogId: blog.id, updatedBlog: updatedBlog }));
   };
 
@@ -34,40 +35,45 @@ const Blog = () => {
   const addComment = async (event) => {
     event.preventDefault();
     const updatedBlog = await blogService.addComment(blog.id, comment);
-    dispatch(updateBlog({blogId: blog.id, updatedBlog}));
+    dispatch(updateBlog({ blogId: blog.id, updatedBlog }));
     setComment("");
   };
 
   return (
     <div>
       <h2>
-        '{blog.title}' by '{blog.author}'
+        <span id="blogtitle">{blog.title}</span> by{" "}
+        <span id="blogauthor">{blog.author}</span>
       </h2>
-      <a href={blog.url}>{blog.url}</a>
-      <div>
-        {blog.likes} <button onClick={() => likeBlog()}>like</button>
+      <div id="blogurl">
+        URL: <a href={blog.url}>{blog.url}</a>
       </div>
-      <div>added by {blog.user.name}</div>
+      <div id="bloglikes">
+        Likes: {blog.likes} <Button onClick={() => likeBlog()}>like</Button>
+      </div>
+      <div id="blogadder">Added by: {blog.user.name}</div>
       {blog.user.username === user.username && (
         <div>
-          <button onClick={deleteBlog}>remove</button>
+          <Button onClick={deleteBlog}>Remove</Button>
         </div>
       )}
-      <h3>comments</h3>
-      <form>
-        <input
+      <h3>Comments</h3>
+      <Form className="d-flex">
+        <Form.Control
           type="text"
           name="comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-        ></input>
-        <input type="submit" onClick={addComment} value="add comment"></input>
-      </form>
-      <ul>
+        />
+        <Button type="submit" onClick={addComment}>
+          Add
+        </Button>
+      </Form>
+      <ListGroup>
         {blog["comments"].map((comment) => (
-          <li key={comment}>{comment}</li>
+          <ListGroup.Item key={comment}>{comment}</ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   );
 };

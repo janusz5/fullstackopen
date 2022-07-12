@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { Button, Form } from "react-bootstrap";
 import loginServise from "../services/login";
 import {
   errorNotification,
@@ -30,28 +31,32 @@ const Login = (props) => {
 
   return (
     <>
-      <h2>log in to application</h2>
-      <form onSubmit={handleLogin} id="loginForm">
-        <label htmlFor="username">username:</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
-        />
-        <br />
-        <label htmlFor="password">password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-        />
-        <br />
-        <input type="submit" value="login" id="loginSubmit" />
-      </form>
+      <h2>Log In To Application</h2>
+      <Form onSubmit={handleLogin} id="loginForm">
+        <Form.Group>
+          <Form.Label htmlFor="username">Username:</Form.Label>
+          <Form.Control
+            type="text"
+            id="username"
+            name="username"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label htmlFor="password">Password:</Form.Label>
+          <Form.Control
+            type="password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </Form.Group>
+        <Button type="submit" id="loginSubmit">
+          Login
+        </Button>
+      </Form>
     </>
   );
 };

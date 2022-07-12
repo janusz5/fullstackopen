@@ -14,7 +14,7 @@ const notificationSlice = createSlice({
       const message = action.payload.message;
       const timeoutId = action.payload.timeoutId;
       if (state !== null) clearTimeout(state.timeoutId);
-      return { statusType: "error", message, timeoutId };
+      return { statusType: "danger", message, timeoutId };
     },
     unsetNotification: (state, action) => {
       return null;

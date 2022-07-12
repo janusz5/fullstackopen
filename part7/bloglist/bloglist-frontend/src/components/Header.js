@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { Button, Nav, Navbar } from "react-bootstrap";
 import { logoutUser } from "../reducers/userReducer";
 
 const Header = () => {
@@ -10,29 +11,25 @@ const Header = () => {
     dispatch(logoutUser());
   };
 
-  const padding = {
-    paddingRight: 10,
-  };
-
-  const menuStyle = {
-    backgroundColor: "lightgrey",
-    fontSize: "1.1em",
-  };
-
   return (
-    <div>
-      <div style={menuStyle}>
-        <Link to="/" style={padding}>
-          Blogs
-        </Link>
-        <Link to="/users" style={padding}>
-          Users
-        </Link>
-        <span style={{ paddingRight: 4 }}>{user.name} is logged in</span>
-        <button onClick={logout}>log out</button>
-      </div>
-      <h1>Blog App</h1>
-    </div>
+    <Navbar variant="light" bg="light" expand="lg">
+      <Navbar.Brand>Blog App</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+          <Nav.Link href="#">
+            <Link to="/">Blogs</Link>
+          </Nav.Link>
+          <Nav.Link href="#">
+            <Link to="/users">Users</Link>
+          </Nav.Link>
+        </Nav>
+        <Navbar.Text style={{ paddingRight: 7 }}>
+          {user.name} is logged in
+        </Navbar.Text>
+        <Button onClick={logout}>Log Out</Button>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 
