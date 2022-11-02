@@ -1,0 +1,18 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "author": "vscode author",
+    "url": "vscode url",
+    "title": "vscode title",
+    "likes": 9
+}
+
+### Test error
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "author": "testauthor"
+}
