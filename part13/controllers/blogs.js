@@ -7,13 +7,9 @@ router.get("/", async (req, res) => {
   res.json(blogs);
 });
 
-router.post("/", async (req, res) => {
-  try {
-    const blog = await Blog.create(req.body);
-    res.json(blog);
-  } catch (error) {
-    return res.status(400).json(error);
-  }
+router.post("/", async (req, res, next) => {
+  const blog = await Blog.create(req.body);
+  res.json(blog);
 });
 
 
@@ -23,18 +19,18 @@ const blogFinder = async (req, res, next) => {
 }
 
 router.delete("/:id", blogFinder, async (req, res) => {
-  if (!req.blog) {
-    return res.status(204).end()
-  }
-  try {
+  if (req.blog) {
     await req.blog.destroy()
-    res.status(200).end()
-  } catch (error) {
-    return res.status(400).json(error);
   }
+  return res.status(204).end()
 })
 
 router.put('/:id', blogFinder, async (req, res) => {
+  if (!req.body.likes) {
+    const error = new Error("blog likes missing")
+    error.name = "InputError"
+    throw error
+  }
   if (req.blog) {
     req.blog.likes = req.body.likes
     req.blog.save()

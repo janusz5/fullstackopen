@@ -4,3 +4,10 @@ Content-Type: application/json
 {
   "likes": 20
 }
+
+### test error
+
+PUT http://localhost:3001/api/blogs/5
+Content-Type: application/json
+
+{}

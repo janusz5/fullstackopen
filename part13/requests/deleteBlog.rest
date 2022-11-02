@@ -1,1 +1,5 @@
 DELETE http://localhost:3001/api/blogs/3
+
+### error test
+
+DELETE http://localhost:3001/api/blogs/100
