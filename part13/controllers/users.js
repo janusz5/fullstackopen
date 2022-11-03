@@ -10,7 +10,6 @@ userRouter.get('/', async (req, res) => {
 })
 
 userRouter.post('/', async (req, res) => {
-  console.log(req.body)
   const {password, ...rest} = req.body
   if (!password) {
     return res.status(400).json({"error": "password missing"})
