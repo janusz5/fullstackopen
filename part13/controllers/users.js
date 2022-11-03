@@ -23,7 +23,7 @@ router.get("/:id", async (req, res) => {
       model: Blog,
       as: 'marked_to_read',
       through: {
-        attributes: []
+        attributes: ["id", "read"]
       }
     },{
       model: Blog
