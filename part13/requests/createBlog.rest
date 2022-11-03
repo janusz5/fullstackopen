@@ -1,6 +1,6 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAdXNlci5kZSIsImlkIjoyOSwiaWF0IjoxNjY3NDM4MTE4LCJleHAiOjE2Njc0NDE3MTh9.gmnuap2j0XUCPC90WaIOn0A_-2pq-enzUgz5rjIX-B4
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAdXNlci5kZSIsImlkIjoxLCJpYXQiOjE2Njc0OTQ0NjcsImV4cCI6MTY2NzQ5ODA2N30.vXgO0wF3Ya98oDkZUcvirVdg9uMpTR52mWFMzxNFTXQ
 
 {
     "author": "vscode author",
