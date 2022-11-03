@@ -7,23 +7,28 @@ const blogFinder = async (req, res, next) => {
   next()
 }
 
+const userExtractor = async (req, res, next) => {
+  req.user = await User.findByPk(req.decodedToken.id)
+  next()
+}
+
 router.get("/", async (req, res) => {
   const blogs = await Blog.findAll();
   res.json(blogs);
 });
 
-router.post("/", tokenExtractor, async (req, res) => {
-  console.log(req.decodedToken)
-  const user = await User.findByPk(req.decodedToken.id)
-  const blog = await Blog.create({...req.body, userId: user.id});
+router.post("/", tokenExtractor, userExtractor, async (req, res) => {
+  const blog = await Blog.create({...req.body, userId: req.user.id});
   res.status(201).json(blog);
 });
 
-router.delete("/:id", blogFinder, async (req, res) => {
-  if (req.blog) {
-    await req.blog.destroy();
-  }
-  return res.status(204).end();
+router.delete("/:id", blogFinder, tokenExtractor, userExtractor, async (req, res) => {
+  if (!req.blog) 
+    return res.status(204).end();
+  if (req.blog.userId !== req.user.id) 
+    return res.status(401).json({"error": "only the creator of the blog can delete it"})
+  await req.blog.destroy();
+  return res.status(200).end()
 });
 
 router.put("/:id", blogFinder, async (req, res) => {
