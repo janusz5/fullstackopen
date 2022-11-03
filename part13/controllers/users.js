@@ -1,10 +1,16 @@
 const bcrypt = require('bcryptjs')
 const userRouter = require('express').Router()
-const User = require('../models/user')
+const {User, Blog} = require('../models')
+
+const getUserWithoutPWHash = (user) => {
+  var {passwordHash, ...returnUser } = user.toJSON()
+  return returnUser
+}
 
 userRouter.get('/', async (req, res) => {
   const users = await User.findAll({
-    attributes: { exclude: ['passwordHash']}
+    attributes: { exclude: ['passwordHash'] },
+    include: { model: Blog }
   })
   res.json(users)
 })
@@ -14,10 +20,9 @@ userRouter.post('/', async (req, res) => {
   if (!password) {
     return res.status(400).json({"error": "password missing"})
   }
-  var passwordHash = await bcrypt.hash(password, 10)
+  const passwordHash = await bcrypt.hash(password, 10)
   const user = await User.create({passwordHash, ...rest})
-  var {passwordHash, ...returnUser } = user.toJSON()
-  res.status(201).json(returnUser)
+  res.status(201).json(getUserWithoutPWHash(user))
 })
 
 userRouter.put('/:username', async (req, res) => {
@@ -25,7 +30,7 @@ userRouter.put('/:username', async (req, res) => {
   if (user) {
     user.username = req.body.username
     await user.save()
-    res.json(user)
+    res.json(getUserWithoutPWHash(user))
   } else {
     res.status(404).end()
   }
