@@ -17,13 +17,19 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+  const readQuery = req.query.read
+  const where = {}
+  if (readQuery) {
+    where.read = readQuery
+  }
   const user = await User.findByPk(req.params.id, {
     attributes: { exclude: ["passwordHash"] },
     include: [{
       model: Blog,
       as: 'marked_to_read',
       through: {
-        attributes: ["id", "read"]
+        attributes: ["id", "read"],
+        where
       }
     },{
       model: Blog
