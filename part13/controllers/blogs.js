@@ -23,7 +23,8 @@ router.get("/", async (req, res) => {
   }
   const blogs = await Blog.findAll({
     include: {model: User, attributes: {exclude: ["passwordHash"]}},
-    where
+    where,
+    order: [['likes', 'DESC']]
   });
   res.json(blogs);
 });
