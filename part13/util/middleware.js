@@ -4,6 +4,8 @@ const errorHandler = (error, req, res, next) => {
     return res.status(400).json({ error: error.message })
   } else if (error.name === "InputError") {
     return res.status(400).json({ error: error.message })
+  } else if (error.name === "SequelizeUniqueConstraintError") {
+    return res.status(400).json({ error: error.errors[0].message})
   }
   return res.status(400).json({ error: "unknown error" });
 };
