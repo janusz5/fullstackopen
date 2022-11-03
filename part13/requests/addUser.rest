@@ -2,6 +2,17 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
+  "username": "test@user.de",
+  "name": "testname",
+  "password": "testpassword"
+}
+
+### error test
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
   "username": "testuser",
   "name": "testname",
   "password": "testpassword"
