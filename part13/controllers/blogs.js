@@ -1,15 +1,10 @@
 const router = require("express").Router();
 const { Op } = require('sequelize')
-const { tokenExtractor } = require("../util/middleware");
+const { tokenExtractor, userExtractor } = require("../util/middleware");
 const { Blog, User } = require("../models");
 
 const blogFinder = async (req, res, next) => {
   req.blog = await Blog.findByPk(req.params.id)
-  next()
-}
-
-const userExtractor = async (req, res, next) => {
-  req.user = await User.findByPk(req.decodedToken.id)
   next()
 }
 
