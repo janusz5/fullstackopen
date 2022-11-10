@@ -43,4 +43,38 @@ const calculateExercises = (exerciseHours: Array<number>, targetHours: number): 
   return { periodLength, trainingDays, success, rating, ratingDescription, target, average }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+interface ExerciseValues {
+  exerciseHours: Array<number>;
+  targetHours: number;
+}
+
+const parseExcArguments = (args: Array<string>): ExerciseValues => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  const argLength: number = args.length
+
+  let exerciseHours: Array<number> = []
+  let targetHours: number
+  for (let i: number = 0; i < argLength; i++) {
+    if (i < 2) continue
+    else if (isNaN(Number(args[i]))) throw new Error('Provided values were not numbers!')
+    else if (i === argLength - 1) targetHours = Number(args[i])
+    else {
+      exerciseHours.push(Number(args[i]))
+    }
+  }
+
+  return { exerciseHours, targetHours }
+}
+
+try {
+  const { exerciseHours, targetHours } = parseExcArguments(process.argv);
+  console.log(calculateExercises(exerciseHours, targetHours))
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happened.'
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  }
+  console.log(errorMessage);
+}
+
+//console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))

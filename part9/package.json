@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "ts-node": "ts-node",
-    "bmi": "ts-node bmiCalculator.ts",
-    "exerC": "ts-node exerciseCalculator.ts"
+    "calculateBmi": "ts-node bmiCalculator.ts",
+    "calculateExercises": "ts-node exerciseCalculator.ts"
   },
   "author": "",
   "license": "ISC",
