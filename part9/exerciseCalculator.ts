@@ -68,9 +68,9 @@ const parseExcArguments = (args: Array<string>): ExerciseValues => {
   if (args.length < 4) throw new Error("Not enough arguments");
   const argLength: number = args.length;
 
-  let exerciseHours: Array<number> = [];
-  let targetHours: number = -1;
-  for (let i: number = 0; i < argLength; i++) {
+  const exerciseHours: Array<number> = [];
+  let targetHours = -1;
+  for (let i = 0; i < argLength; i++) {
     if (i < 2) continue;
     else if (isNaN(Number(args[i])))
       throw new Error("Provided values were not numbers!");
