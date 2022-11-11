@@ -38,3 +38,5 @@ try {
 }
 
 //console.log(calculateBmi(180, 74))
+
+export { calculateBmi };
