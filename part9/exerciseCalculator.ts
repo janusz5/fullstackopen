@@ -9,39 +9,55 @@ interface ExerciseInformation {
 }
 
 const mean = (a: Array<number>): number => {
-  const sum: number = a.reduce((previous: number, current: number): number => previous + current, 0)
-  return sum / a.length
-}
+  const sum: number = a.reduce(
+    (previous: number, current: number): number => previous + current,
+    0
+  );
+  return sum / a.length;
+};
 
-const calculateExercises = (exerciseHours: Array<number>, targetHours: number): ExerciseInformation => {
-  const periodLength: number = exerciseHours.length
+const calculateExercises = (
+  exerciseHours: Array<number>,
+  targetHours: number
+): ExerciseInformation => {
+  const periodLength: number = exerciseHours.length;
   const trainingDays: number = exerciseHours.reduce(
     (previous: number, current: number): number => {
-      if (current !== 0) return previous + 1
-      else return previous
-    }, 0)
-  const average: number = mean(exerciseHours)
-  const target: number = targetHours
-  let success: boolean
+      if (current !== 0) return previous + 1;
+      else return previous;
+    },
+    0
+  );
+  const average: number = mean(exerciseHours);
+  const target: number = targetHours;
+  let success: boolean;
   if (average < target) {
-    success = false
+    success = false;
   } else {
-    success = true
+    success = true;
   }
-  let rating: number
-  let ratingDescription: string
+  let rating: number;
+  let ratingDescription: string;
   if (average > target) {
-    rating = 1
-    ratingDescription = "good, the target was met"
+    rating = 1;
+    ratingDescription = "good, the target was met";
   } else if (average > target * 0.8) {
-    rating = 2
-    ratingDescription = "not too bad but could be better"
+    rating = 2;
+    ratingDescription = "not too bad but could be better";
   } else {
-    rating = 3
-    ratingDescription = "bad, far away from the target"
+    rating = 3;
+    ratingDescription = "bad, far away from the target";
   }
-  return { periodLength, trainingDays, success, rating, ratingDescription, target, average }
-}
+  return {
+    periodLength,
+    trainingDays,
+    success,
+    rating,
+    ratingDescription,
+    target,
+    average,
+  };
+};
 
 interface ExerciseValues {
   exerciseHours: Array<number>;
@@ -49,30 +65,31 @@ interface ExerciseValues {
 }
 
 const parseExcArguments = (args: Array<string>): ExerciseValues => {
-  if (args.length < 4) throw new Error('Not enough arguments');
-  const argLength: number = args.length
+  if (args.length < 4) throw new Error("Not enough arguments");
+  const argLength: number = args.length;
 
-  let exerciseHours: Array<number> = []
-  let targetHours: number
+  let exerciseHours: Array<number> = [];
+  let targetHours: number = -1;
   for (let i: number = 0; i < argLength; i++) {
-    if (i < 2) continue
-    else if (isNaN(Number(args[i]))) throw new Error('Provided values were not numbers!')
-    else if (i === argLength - 1) targetHours = Number(args[i])
+    if (i < 2) continue;
+    else if (isNaN(Number(args[i])))
+      throw new Error("Provided values were not numbers!");
+    else if (i === argLength - 1) targetHours = Number(args[i]);
     else {
-      exerciseHours.push(Number(args[i]))
+      exerciseHours.push(Number(args[i]));
     }
   }
 
-  return { exerciseHours, targetHours }
-}
+  return { exerciseHours, targetHours };
+};
 
 try {
   const { exerciseHours, targetHours } = parseExcArguments(process.argv);
-  console.log(calculateExercises(exerciseHours, targetHours))
+  console.log(calculateExercises(exerciseHours, targetHours));
 } catch (error: unknown) {
-  let errorMessage = 'Something bad happened.'
+  let errorMessage = "Something bad happened.";
   if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
+    errorMessage += " Error: " + error.message;
   }
   console.log(errorMessage);
 }
