@@ -3,7 +3,8 @@ Content-Type: application/json
 
 {
   "name":"testname3",
-  "dateOfBirth":"2022-01-01",
-  "gender":2323,
-  "occupation":"dggfdgdsfg"
+  "dateOfBirth":"2011-01-01",
+  "gender": "male",
+  "occupation":"dggfdgdsfg",
+  "ssn": "sdffhdsdklf"
 }
