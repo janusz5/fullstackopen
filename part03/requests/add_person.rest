@@ -1,0 +1,17 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "added person from vs code",
+    "number": "014-6464334783"
+}
+
+###
+
+POST https://thawing-coast-07191.herokuapp.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "added person from vs code",
+    "number": "014-6464334783"
+}
