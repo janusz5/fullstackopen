@@ -14,6 +14,13 @@ const isGender = (param: any): param is Gender => {
   return Object.values(Gender).includes(param);
 };
 
+const parseId = (id: unknown): string => {
+  if (!id || !isString(id)) {
+    throw new Error("Incorrect or missing id");
+  }
+  return id;
+};
+
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
     throw new Error("Incorrect or missing name");
@@ -70,8 +77,11 @@ const toNewPatient = ({
     ssn: parseSSN(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
+    entries: []
   };
   return newPatient;
 };
+
+export { parseId };
 
 export default toNewPatient;
