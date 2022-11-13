@@ -42,6 +42,23 @@ const PatientView = () => {
           <ListItemText>gender: {patient.gender}</ListItemText>
         </ListItem>
       </List>
+      <Typography variant="h5" style={{ margin: "0.7em 0em 0.2em 0em" }}>
+        Entries
+      </Typography>
+      <div>
+        {patient.entries?.map((entry) => (
+          <div key={entry.id}>
+            <div>
+              {entry.date} {entry.description}
+            </div>
+            <ul>
+              {entry.diagnosisCodes?.map((diagnosis) => (
+                <li key={diagnosis}>{diagnosis}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
