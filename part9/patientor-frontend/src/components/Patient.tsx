@@ -8,7 +8,7 @@ import { useStateValue, updatePatient } from "../state";
 
 const PatientView = () => {
   const patientId = useParams().patientId as string;
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
   const patient = patients[patientId];
   if (!patient || !patient.ssn) {
     useEffect(() => {
@@ -22,6 +22,8 @@ const PatientView = () => {
     }, []);
     return <></>;
   }
+
+  if (Object.keys(diagnoses).length === 0) return <></>;
 
   return (
     <div>
@@ -52,8 +54,10 @@ const PatientView = () => {
               {entry.date} {entry.description}
             </div>
             <ul>
-              {entry.diagnosisCodes?.map((diagnosis) => (
-                <li key={diagnosis}>{diagnosis}</li>
+              {entry.diagnosisCodes?.map((diagnosisCode) => (
+                <li key={diagnosisCode}>
+                  {diagnosisCode} {diagnoses[diagnosisCode].name}
+                </li>
               ))}
             </ul>
           </div>
