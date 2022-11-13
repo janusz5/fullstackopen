@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
 import { apiBaseUrl } from "../constants";
 import { Patient } from "../types";
-import { useStateValue } from "../state";
+import { useStateValue, updatePatient } from "../state";
 
 const PatientView = () => {
   const patientId = useParams().patientId as string;
@@ -16,7 +16,7 @@ const PatientView = () => {
         const response = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${patientId}`
         );
-        dispatch({ type: "UPDATE_PATIENT", payload: response.data });
+        dispatch(updatePatient(response.data));
       };
       void fetchPatient(patientId);
     }, []);
