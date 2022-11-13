@@ -1,14 +1,23 @@
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
+import { Typography, List, ListItem, ListItemText, Box } from "@material-ui/core";
 import { apiBaseUrl } from "../constants";
-import { Patient } from "../types";
+import { Entry, Patient } from "../types";
 import { useStateValue, updatePatient } from "../state";
+import HospitalEntryView from "./HospitalEntryView";
+import HealthCheckEntryView from "./HealthCheckEntryView";
+import OccupationalHealthcareEntryView from "./OccupationalHealthcareEntryView";
+
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
 
 const PatientView = () => {
   const patientId = useParams().patientId as string;
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
   const patient = patients[patientId];
   if (!patient || !patient.ssn) {
     useEffect(() => {
@@ -23,10 +32,21 @@ const PatientView = () => {
     return <></>;
   }
 
-  if (Object.keys(diagnoses).length === 0) return <></>;
+  const getEntryView = (entry: Entry) => {
+    switch (entry.type) {
+      case "Hospital":
+        return <HospitalEntryView key={entry.id} entry={entry} />;
+      case "HealthCheck":
+        return <HealthCheckEntryView key={entry.id} entry={entry} />;
+      case "OccupationalHealthcare":
+        return <OccupationalHealthcareEntryView key={entry.id} entry={entry} />;
+      default:
+        return assertNever(entry);
+    }
+  };
 
   return (
-    <div>
+    <Box>
       <Typography variant="h4" style={{ margin: "0.7em 0em 0.2em 0em" }}>
         {patient.name}
       </Typography>
@@ -47,23 +67,8 @@ const PatientView = () => {
       <Typography variant="h5" style={{ margin: "0.7em 0em 0.2em 0em" }}>
         Entries
       </Typography>
-      <div>
-        {patient.entries?.map((entry) => (
-          <div key={entry.id}>
-            <div>
-              {entry.date} {entry.description}
-            </div>
-            <ul>
-              {entry.diagnosisCodes?.map((diagnosisCode) => (
-                <li key={diagnosisCode}>
-                  {diagnosisCode} {diagnoses[diagnosisCode].name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
+      {patient.entries?.map((entry) => <Box key={entry.id} border={1} borderRadius={16} p={1.5} my={1.25}>{getEntryView(entry)}</Box>)}
+    </Box>
   );
 };
 
