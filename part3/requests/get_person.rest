@@ -1,5 +1,0 @@
-GET http://localhost:3001/api/persons/6222a66a5b8aea71c5000b5c
-
-###
-
-GET https://thawing-coast-07191.herokuapp.com/api/persons/6222a66a5b8aea71c5000b5c

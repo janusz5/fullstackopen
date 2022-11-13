@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlZTQ29kZVJlc3RDbGllbnQiLCJpZCI6IjYyNThhOGY4YmRkYTkyZTg1MDNiOTc3MCIsImlhdCI6MTY2NjM5NzQwMSwiZXhwIjoxNjY2NDAxMDAxfQ.T9paR2kBt1X2wz6iiJGizUe2BADeUXp8V-m4wwIhedQ
+
+{
+    "title": "blog added from vs code rest client",
+    "author": "janusz",
+    "url": "http://localhost:3003",
+    "likes": 100
+}

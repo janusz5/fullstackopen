@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  bloglist-frontend:
+    image: bloglist-frontend-dev
+    build: 
+      context: ./frontend/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./frontend/:/usr/src/app
+    container_name: bloglist-frontend-dev
+    environment:
+      - PORT=3000
+      - WDS_SOCKET_PORT=8080
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - ./backend/utils/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./backend/mongo_data:/data/db
+
+  bloglist-backend:
+    image: bloglist-backend-dev
+    build:
+      context: ./backend/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./backend/:/usr/src/app
+    container_name: bloglist-backend-dev
+    environment:
+      - MONGODB_URI=mongodb://the_username:the_password@mongo:27017/the_database
+      - PORT=3003
+      - SECRET=x8RR8vpiRkbQsDMlZ0LpWG7DUoyHMoLlI+Q8Rg2WCGMuDIteDXlNE2Qb7IQW0pUFIklnptY3d8d2fivr49eiI0tWdbve6W4Sc7lPkZZ+JM1LkIaDOWdvhEiaNgcwxyEdM+kRGg6mZFaGQhw7+quxx8xixRaG7DtUHWB4mkrluUIamZVnkbU3+k9UKgxmogfCTUIAInd2eEB39JQFC9AlXwZ90PpMNv/iMHSVTliHM3H/rUHdOEbcjtVHkyJs4LNcb32AxJWPFDTaZ6KhUeaKBeiJaeXtU2CGrlJRpD5N9Iw07qkhdJgCX5yVYb9Y/cvVbi9xlgJDKnjPGSU0ReteHw
+
+  nginx:
+    image: nginx:1.23
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - bloglist-frontend
+      - bloglist-backend
