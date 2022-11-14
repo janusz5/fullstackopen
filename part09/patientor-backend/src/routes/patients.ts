@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import express from "express";
 import patientService from "../services/patientService";
-import toNewPatient from "../utils";
-import { parseId } from "../utils";
+import toNewPatient from "../parsers/patientParser";
+import { parseId } from "../parsers/utils";
+import toNewEntry from "../parsers/entryParser";
 
 const router = express.Router();
 
@@ -20,6 +21,13 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   const newPatient = toNewPatient(req.body);
   const addedPatient = patientService.addPatient(newPatient);
+  return res.json(addedPatient);
+});
+
+router.post("/:id/entries", (req, res) => {
+  const entry = toNewEntry(req.body);
+  const id: string = parseId(req.params.id);
+  const addedPatient = patientService.addEntry(id, entry);
   return res.json(addedPatient);
 });
 

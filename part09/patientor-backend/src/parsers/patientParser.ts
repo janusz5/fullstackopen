@@ -1,24 +1,10 @@
-import { NewPatient, Gender } from "./types";
-
-const isString = (text: unknown): text is string => {
-  return typeof text === "string" || text instanceof String;
-};
-
-const isDate = (date: string): boolean => {
-  return Boolean(Date.parse(date));
-};
+import { NewPatient, Gender } from "../types";
+import { isString, isDate } from "./utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isGender = (param: any): param is Gender => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   return Object.values(Gender).includes(param);
-};
-
-const parseId = (id: unknown): string => {
-  if (!id || !isString(id)) {
-    throw new Error("Incorrect or missing id");
-  }
-  return id;
 };
 
 const parseName = (name: unknown): string => {
@@ -77,11 +63,9 @@ const toNewPatient = ({
     ssn: parseSSN(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
-    entries: []
+    entries: [],
   };
   return newPatient;
 };
-
-export { parseId };
 
 export default toNewPatient;
