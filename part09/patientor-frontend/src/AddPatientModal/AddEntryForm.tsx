@@ -4,7 +4,13 @@ import { DiagnosisSelection, TextField } from "./FormField";
 import { Grid, Button } from "@material-ui/core";
 import { useStateValue } from "../state";
 
-export type EntryFormValues = Omit<Entry, "id">;
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+
+export type EntryFormValues = UnionOmit<Entry, "id">;
+
+const isDate = (date: string): boolean => {
+  return Boolean(Date.parse(date));
+};
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -25,6 +31,28 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         sickLeave: { startDate: "", endDate: "" },
       }}
       onSubmit={onSubmit}
+      validate={(values) => {
+        const requiredError = "Field is required";
+        const dateError = "Field has to be a date in format YYYY-MM-DD";
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const errors: { [field: string]: any } = {};
+        if (!values.description) errors.description = requiredError;
+        if (!isDate(values.date)) errors.date = dateError;
+        if (!values.date) errors.date = requiredError;
+        if (!values.specialist) errors.specialist = requiredError;
+        if (values.type === "OccupationalHealthcare") {
+          if (!values.employerName) errors.employerName = requiredError;
+          if (values.sickLeave?.startDate || values.sickLeave?.endDate) {
+            errors.sickLeave = {};
+            if (!isDate(values.sickLeave?.startDate)) errors.sickLeave.startDate = dateError;
+            if (!values.sickLeave?.startDate) errors.sickLeave.startDate = requiredError;
+            if (!isDate(values.sickLeave?.startDate)) errors.sickLeave.endDate = dateError;
+            if (!values.sickLeave?.startDate) errors.sickLeave.endDate = requiredError;
+            console.log(errors);
+          }
+        }
+        return errors;
+      }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
