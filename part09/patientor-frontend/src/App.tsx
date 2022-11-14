@@ -8,7 +8,7 @@ import { useStateValue, setDiagnosesList, setPatientList } from "./state";
 import { Diagnosis, Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
-import PatientView from "./components/Patient";
+import PatientView from "./components/PatientView";
 import { Typography } from "@material-ui/core";
 
 const App = () => {

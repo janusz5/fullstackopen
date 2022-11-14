@@ -25,10 +25,12 @@ router.post("/", (req, res) => {
 });
 
 router.post("/:id/entries", (req, res) => {
+  console.log(req.params.id);
+  console.log(req.body);
   const entry = toNewEntry(req.body);
   const id: string = parseId(req.params.id);
   const addedPatient = patientService.addEntry(id, entry);
-  return res.json(addedPatient);
+  return res.json({patientId: addedPatient.id, entry});
 });
 
 export default router;
