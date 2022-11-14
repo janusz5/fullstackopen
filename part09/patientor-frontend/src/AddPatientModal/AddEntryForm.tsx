@@ -1,7 +1,8 @@
 import { Formik, Form, Field } from "formik";
-import { Entry } from "../types";
+import { Entry, HealthCheckRating } from "../types";
 import {
   DiagnosisSelection,
+  HealthCheckRatingOption,
   SelectField,
   TextField,
   TypeOption,
@@ -23,6 +24,13 @@ const typeOptions: TypeOption[] = [
   { value: "HealthCheck", label: "HealthCheck" },
   { value: "OccupationalHealthcare", label: "OccupationalHealthcare" },
   { value: "Hospital", label: "Hospital" },
+];
+
+const healthCheckRatingOptions: HealthCheckRatingOption[] = [
+  { value: HealthCheckRating.Healthy, label: "Healthy" },
+  { value: HealthCheckRating.LowRisk, label: "LowRisk" },
+  { value: HealthCheckRating.HighRisk, label: "HighRisk" },
+  { value: HealthCheckRating.CriticalRisk, label: "CriticalRisk" },
 ];
 
 interface Props {
@@ -70,12 +78,24 @@ const getHospitalForm = () => (
   </>
 );
 
+const getHealthCheckForm = () => {
+  return (
+    <SelectField
+      label="healthCheckRating"
+      name="healthCheckRating"
+      options={healthCheckRatingOptions}
+    />
+  );
+};
+
 const getEntryForm = (type: string) => {
   switch (type) {
     case "OccupationalHealthcare":
       return getOccupationalHealthcareForm();
     case "Hospital":
       return getHospitalForm();
+    case "HealthCheck":
+      return getHealthCheckForm();
     default:
       return "";
   }
@@ -92,7 +112,7 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         diagnosisCodes: [],
         type: "OccupationalHealthcare",
         employerName: "",
-        sickLeave: { startDate: "", endDate: "" }
+        sickLeave: { startDate: "", endDate: "" },
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -104,28 +124,36 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         if (!isDate(values.date)) errors.date = dateError;
         if (!values.date) errors.date = requiredError;
         if (!values.specialist) errors.specialist = requiredError;
-        if (values.type === "OccupationalHealthcare") {
-          if (!values.employerName) errors.employerName = requiredError;
-          if (values.sickLeave?.startDate || values.sickLeave?.endDate) {
-            errors.sickLeave = {};
-            if (!isDate(values.sickLeave?.startDate))
-              errors.sickLeave.startDate = dateError;
-            if (!values.sickLeave?.startDate)
-              errors.sickLeave.startDate = requiredError;
-            if (!isDate(values.sickLeave?.startDate))
-              errors.sickLeave.endDate = dateError;
-            if (!values.sickLeave?.startDate)
-              errors.sickLeave.endDate = requiredError;
-          }
-        } else if (values.type === "Hospital") {
-          errors.discharge = {};
-          if (!isDate(values.discharge.date))
-            errors.discharge.date = dateError;
-          if (!values.discharge.date)
-            errors.discharge.date = requiredError;
-          if (!values.discharge.criteria)
-            errors.discharge.criteria = requiredError;
-      }
+        switch (values.type) {
+          case "OccupationalHealthcare":
+            if (!values.employerName) errors.employerName = requiredError;
+            if (values.sickLeave?.startDate || values.sickLeave?.endDate) {
+              errors.sickLeave = {};
+              if (!isDate(values.sickLeave?.startDate))
+                errors.sickLeave.startDate = dateError;
+              if (!values.sickLeave?.startDate)
+                errors.sickLeave.startDate = requiredError;
+              if (!isDate(values.sickLeave?.startDate))
+                errors.sickLeave.endDate = dateError;
+              if (!values.sickLeave?.startDate)
+                errors.sickLeave.endDate = requiredError;
+            }
+            break;
+          case "Hospital":
+            errors.discharge = {};
+            if (!isDate(values.discharge.date))
+              errors.discharge.date = dateError;
+            if (!values.discharge.date) errors.discharge.date = requiredError;
+            if (!values.discharge.criteria)
+              errors.discharge.criteria = requiredError;
+            break;
+          case "HealthCheck":
+            if (!values.healthCheckRating)
+              errors.healthCheckRating = requiredError;
+            break;
+          default:
+            errors.type = "Wrong Type";
+        }
         return errors;
       }}
     >
