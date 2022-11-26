@@ -168,7 +168,7 @@ const resolvers = {
         return null;
       }
       author.born = args.setBornTo;
-      authors = authors.concat(author);
+      authors = authors.map(a => a.name === author.name ? author : a);
       return author;
     },
   },
