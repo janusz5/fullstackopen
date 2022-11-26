@@ -1,18 +1,19 @@
-import { useQuery } from '@apollo/client'
-import { ALL_AUTHORS } from '../queries'
+import { useQuery } from "@apollo/client";
+import { ALL_AUTHORS } from "../queries";
+import EditAuthorYear from "./EditAuthorYear";
 
 const Authors = (props) => {
-  const result = useQuery(ALL_AUTHORS)
-  
+  const result = useQuery(ALL_AUTHORS);
+
   if (!props.show) {
-    return null
+    return null;
   }
 
   if (result.loading) {
-    return <div>loading...</div>
+    return <div>loading...</div>;
   }
 
-  const authors = result.data.allAuthors
+  const authors = result.data.allAuthors;
 
   return (
     <div>
@@ -33,8 +34,9 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+      <EditAuthorYear />
     </div>
-  )
-}
+  );
+};
 
-export default Authors
+export default Authors;
