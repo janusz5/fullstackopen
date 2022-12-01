@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, gql, UserInputError } = require("apollo-server");
 const mongoose = require("mongoose");
 const Book = require("./models/book");
 const Author = require("./models/author");
@@ -16,32 +16,6 @@ mongoose
   .catch((error) => {
     console.log("error connection to MongoDB:", error.message);
   });
-
-let authors = [
-  {
-    name: "Robert Martin",
-    id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
-    born: 1952,
-  },
-  {
-    name: "Martin Fowler",
-    id: "afa5b6f0-344d-11e9-a414-719c6709cf3e",
-    born: 1963,
-  },
-  {
-    name: "Fyodor Dostoevsky",
-    id: "afa5b6f1-344d-11e9-a414-719c6709cf3e",
-    born: 1821,
-  },
-  {
-    name: "Joshua Kerievsky", // birthyear not known
-    id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
-  },
-  {
-    name: "Sandi Metz", // birthyear not known
-    id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
-  },
-];
 
 const typeDefs = gql`
   type Author {
@@ -102,7 +76,11 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author });
       if (!author) {
         author = new Author({ name: args.author });
-        await author.save();
+        try {
+          await author.save();
+        } catch (error) {
+          throw new UserInputError(error.message, { invalidArgs: args });
+        }
       }
       const book = new Book({
         title: args.title,
@@ -110,7 +88,11 @@ const resolvers = {
         author: author,
         genres: args.genres,
       });
-      await book.save();
+      try {
+        await book.save();
+      } catch (error) {
+        throw new UserInputError(error.message, { invalidArgs: args });
+      }
       return book;
     },
     editAuthor: async (root, args) => {
@@ -119,7 +101,11 @@ const resolvers = {
         return null;
       }
       author.born = args.setBornTo;
-      await author.save();
+      try {
+        await author.save();
+      } catch (error) {
+        throw new UserInputError(error.message, { invalidArgs: args });
+      }
       return author;
     },
   },
