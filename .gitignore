@@ -1,2 +1,3 @@
-*.drawio
-*/node_modules
+**.drawio
+**/node_modules
+**/.env
