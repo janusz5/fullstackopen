@@ -43,58 +43,6 @@ let authors = [
   },
 ];
 
-let books = [
-  {
-    title: "Clean Code",
-    published: 2008,
-    author: "Robert Martin",
-    id: "afa5b6f4-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring"],
-  },
-  {
-    title: "Agile software development",
-    published: 2002,
-    author: "Robert Martin",
-    id: "afa5b6f5-344d-11e9-a414-719c6709cf3e",
-    genres: ["agile", "patterns", "design"],
-  },
-  {
-    title: "Refactoring, edition 2",
-    published: 2018,
-    author: "Martin Fowler",
-    id: "afa5de00-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring"],
-  },
-  {
-    title: "Refactoring to patterns",
-    published: 2008,
-    author: "Joshua Kerievsky",
-    id: "afa5de01-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring", "patterns"],
-  },
-  {
-    title: "Practical Object-Oriented Design, An Agile Primer Using Ruby",
-    published: 2012,
-    author: "Sandi Metz",
-    id: "afa5de02-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring", "design"],
-  },
-  {
-    title: "Crime and punishment",
-    published: 1866,
-    author: "Fyodor Dostoevsky",
-    id: "afa5de03-344d-11e9-a414-719c6709cf3e",
-    genres: ["classic", "crime"],
-  },
-  {
-    title: "The Demon ",
-    published: 1872,
-    author: "Fyodor Dostoevsky",
-    id: "afa5de04-344d-11e9-a414-719c6709cf3e",
-    genres: ["classic", "revolution"],
-  },
-];
-
 const typeDefs = gql`
   type Author {
     name: String!
@@ -129,34 +77,29 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     authorCount: async () => Author.collection.countDocuments(),
-    bookCount: () => books.length,
-    allBooks: (root, args) => {
-      let filteredBooks = [...books];
+    bookCount: async () => Book.collection.countDocuments(),
+    allBooks: async (root, args) => {
+      const filters = {};
       if (args.author) {
-        filteredBooks = filteredBooks.filter(
-          (book) => book.author === args.author
-        );
+        const author = await Author.find({ name: args.author });
+        filters["author"] = author;
       }
       if (args.genre) {
-        filteredBooks = filteredBooks.filter((book) =>
-          book.genres.includes(args.genre)
-        );
+        filters["genres"] = { $in: [args.genre] };
       }
-      return filteredBooks;
+      return Book.find(filters).populate("author");
     },
     allAuthors: async () => Author.find({}),
   },
   Author: {
-    bookCount: (root) => {
-      return books.reduce(
-        (prev, cur) => (cur.author === root.name ? prev + 1 : prev),
-        0
-      );
+    bookCount: async (root) => {
+      const author = await Author.findOne({ name: root.name });
+      return Book.count({ author });
     },
   },
   Mutation: {
     addBook: async (root, args) => {
-      let author = await Author.find({ name: args.author });
+      let author = await Author.findOne({ name: args.author });
       if (!author) {
         author = new Author({ name: args.author });
         await author.save();
@@ -170,13 +113,13 @@ const resolvers = {
       await book.save();
       return book;
     },
-    editAuthor: (root, args) => {
-      const author = authors.find((auth) => auth.name === args.name);
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name });
       if (!author) {
         return null;
       }
       author.born = args.setBornTo;
-      authors = authors.map((a) => (a.name === author.name ? author : a));
+      await author.save();
       return author;
     },
   },
