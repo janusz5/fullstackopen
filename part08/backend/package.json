@@ -2,9 +2,9 @@
   "name": "part08",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node src/index.js",
     "dev": "nodemon"
   },
   "author": "",
@@ -12,6 +12,7 @@
   "dependencies": {
     "apollo-server": "^3.11.1",
     "graphql": "^16.6.0",
+    "mongoose": "^6.7.5",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
