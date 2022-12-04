@@ -5,7 +5,7 @@ import { ME, ALL_BOOKS } from "../queries";
 const Recommended = () => {
   const [favoriteGenre, setFavouriteGenre] = useState(null);
   const meResult = useQuery(ME);
-  const bookResult = useQuery(ALL_BOOKS, { variables: { genre: favoriteGenre } });
+  const bookResult = useQuery(ALL_BOOKS, { variables: { genre: favoriteGenre }, fetchPolicy: "cache-and-network" });
 
   useEffect(() => {
     if (meResult.data) {
@@ -16,7 +16,7 @@ const Recommended = () => {
   if (bookResult.loading) {
     return <div>loading...</div>;
   }
-  
+
   const books = bookResult.data.allBooks;
 
   return (
