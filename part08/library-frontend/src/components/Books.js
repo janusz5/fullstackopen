@@ -1,18 +1,22 @@
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from "../queries"
+import { useQuery } from "@apollo/client";
+import { ALL_BOOKS } from "../queries";
+import { useState } from "react";
 
 const Books = (props) => {
-  const result = useQuery(ALL_BOOKS)
-  
+  const [genre, setGenre] = useState(null);
+  const result = useQuery(ALL_BOOKS, { variables: { genre } });
+
   if (!props.show) {
-    return null
+    return null;
   }
 
   if (result.loading) {
-    return <div>loading...</div>
+    return <div>loading...</div>;
   }
 
-  const books = result.data.allBooks
+  const books = result.data.allBooks;
+
+  const genres = [...new Set(books.reduce((p, c) => [...p, ...c.genres], []))];
 
   return (
     <div>
@@ -34,8 +38,22 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
+      <div>
+        {genre ? (
+          <button onClick={() => setGenre(null)}>show all</button>
+        ) : (
+          <>
+            show only genre:
+            {genres.map((g) => (
+              <button key={g} onClick={() => setGenre(g)}>
+                {g}
+              </button>
+            ))}
+          </>
+        )}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Books
+export default Books;
