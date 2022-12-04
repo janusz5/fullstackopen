@@ -34,7 +34,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <EditAuthorYear authors={authors}/>
+      {props.token ? <EditAuthorYear authors={authors} /> : <></>}
     </div>
   );
 };
